@@ -1,0 +1,194 @@
+# device: 'cuda'
+# seed: 1
+# fold: 1
+# # True only train, test one batch
+# debug: False
+# log: False
+# data:
+#   name: 'drive'
+#   train_folder: 'proceeded_data/drive/'
+#   val_folder: 'proceeded_data/drive/'
+#   test_folder: 'proceeded_data/drive/'
+#   save_folder: 'checkpoints/drive'
+#   supervised_ratio: 1
+#   train_aug: True
+#   img_size: 672
+
+# semi:
+#   conf_thresh: 0.85
+# train:
+#   l_batchsize: 1
+#   u_batchsize: 1
+#   num_workers: 0
+#   num_epochs: 200
+#   num_iters: False # num of updating for each epoch
+#   # batch_size uses args to define
+#   optimizer:
+#     mode: 'adamw'
+#     adamw:
+#       lr: '1e-4'
+#       betas: 
+#         - 0.9
+#         - 0.999
+#       eps: '1e-8'
+#       weight_decay: 0.05
+#     adam:
+#       lr: '1e-4'
+#       betas:
+#         - 0.9
+#         - 0.999
+# test:
+#   only_test: False  # if True, only do test
+#   test_model_dir: ''
+#   num_workers: 0
+#   batch_size: 1
+# # model uses args to define
+# # resnet[18,34,50,101]
+# model_encoder_id: 0
+# model_adapt:
+#   # MLP  AdaptFormer
+#   adapt_method: False
+#   num_domains: 1
+
+# swin:
+#   # name: 'swin_base_patch4_window7_224_in22k'
+#   # DROP_PATH_RATE: 0.2
+#   # EMBED_DIM: 128
+#   # DEPTHS: [ 2, 2, 18, 2 ]
+#   # NUM_HEADS: [ 4, 8, 16, 32 ]
+#   # WINDOW_SIZE: 7
+#   name: 'swin_large_patch4_window7_224_22k'
+#   DROP_PATH_RATE: 0.2
+#   EMBED_DIM: 192
+#   DEPTHS: [2,2,18] #[ 2, 2, 18, 2 ]
+#   NUM_HEADS: [6,12,24] #[ 4, 8, 16, 32 ]
+#   WINDOW_SIZE: 7
+
+
+#CPS
+# =================================================unet================================
+device: 'cuda'
+seed: 1
+fold: 1
+debug: False
+log: False
+data:
+  name: 'stare'
+  train_folder: 'data_processed/stare/'
+  val_folder: 'data_processed/stare/'
+  test_folder: 'data_processed/stare/'
+  save_folder: 'checkpoints/stare_CPS'
+  # save_folder: 'checkpoints/stare_CCVC'
+  # save_folder: 'checkpoints/stare_fixmatch'
+  # save_folder: 'checkpoints/stare_MT'
+  # save_folder: 'checkpoints/stare_uni'
+
+
+  supervised_ratio: 0.25
+  train_aug: True
+  img_size: 512
+
+semi:
+  conf_thresh: 0.95
+
+train:
+  l_batchsize: 1
+  u_batchsize: 1
+  num_workers: 0
+  num_epochs: 80
+  num_iters: False # số lần cập nhật mỗi epoch
+  ema_decay: 0.99
+  optimizer:
+    mode: 'adamw'
+    adamw:
+      lr: 1e-4
+      betas: 
+        - 0.9
+        - 0.999
+      eps: 1e-8
+      weight_decay: 0.05
+    adam:
+      lr: 1e-4
+      betas:
+        - 0.9
+        - 0.999
+
+test:
+  only_test: False  # nếu True, chỉ thực hiện kiểm tra
+  test_model_dir: ''
+  num_workers: 0
+  batch_size: 1
+
+model:
+  type: 'unet'  # Thêm thông tin loại mô hình
+  in_channels: 3  # Kênh đầu vào
+  out_channels: 1  # Kênh đầu ra
+
+# Nếu cần thiết, bạn có thể thêm các thông số khác cho U-Net
+# ví dụ, nếu bạn cần điều chỉnh số kênh hoặc các tham số cụ thể khác
+
+model_encoder_id: 0
+model_adapt:
+  adapt_method: False
+  num_domains: 1
+
+# # U2PL
+# # =================================================unet================================
+# device: 'cuda'
+# seed: 1
+# fold: 1
+# debug: False
+# log: False
+# data:
+#   name: 'stare'
+#   train_folder: 'data_processed/stare/'
+#   val_folder: 'data_processed/stare/'
+#   test_folder: 'data_processed/stare/'
+#   save_folder: 'checkpoints/stare'
+#   supervised_ratio: 0.25
+#   train_aug: True
+#   img_size: 512
+
+# semi:
+#   conf_thresh: 0.9
+
+# train:
+#   l_batchsize: 1
+#   u_batchsize: 1
+#   sup_only_epoch: 20
+#   num_workers: 0
+#   num_epochs: 200
+#   num_iters: False # số lần cập nhật mỗi epoch
+#   optimizer:
+#     mode: 'adamw'
+#     adamw:
+#       lr: 1e-4
+#       betas: 
+#         - 0.9
+#         - 0.999
+#       eps: 1e-8
+#       weight_decay: 0.05
+#     adam:
+#       lr: 1e-4
+#       betas:
+#         - 0.9
+#         - 0.999
+
+# test:
+#   only_test: False  # nếu True, chỉ thực hiện kiểm tra
+#   test_model_dir: ''
+#   num_workers: 0
+#   batch_size: 1
+
+# model:
+#   type: 'unet'  # Thêm thông tin loại mô hình
+#   in_channels: 3  # Kênh đầu vào
+#   out_channels: 1  # Kênh đầu ra
+
+# # Nếu cần thiết, bạn có thể thêm các thông số khác cho U-Net
+# # ví dụ, nếu bạn cần điều chỉnh số kênh hoặc các tham số cụ thể khác
+
+# model_encoder_id: 0
+# model_adapt:
+#   adapt_method: False
+#   num_domains: 1
